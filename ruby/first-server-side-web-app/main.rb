@@ -73,10 +73,7 @@ get '/stock'  do
 ticker = params["ticker"].to_s
 StockQuote::Stock.new(api_key: "pk_5297b0e5a91b4f75afc2b8a65438b6f8")
 stock = StockQuote::Stock.quote(ticker)
-
 "#{stock.company_name} #{stock.latest_price}"
-
-
 end
 
 
