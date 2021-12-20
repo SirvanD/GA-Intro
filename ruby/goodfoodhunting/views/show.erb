@@ -1,6 +1,19 @@
-""
 
-<h1>dish details</h1>
+
+
 
 <h2> dish details for <%= dish['name'] %>  </h2>
 
+<img src="<%= dish['image_url'] %>" alt="">
+
+
+
+
+<form action="/delete_data/<%= dish['id'] %>" method = "post">
+<input type="hidden" name="_method" value="delete">
+ 
+
+<button>delete</button>
+
+</form>
+<a href="/edit_data/<%= dish['id'] %>"> edit</a>

@@ -40,7 +40,7 @@ get '/share_a_dish' do
 
 end
 
-get '/input_dish_data' do
+post '/input_dish_data' do
 
  #anything data sent by the client will
  #automatically be placed inside the params
@@ -54,12 +54,23 @@ conn.close
 
 # redirect '/' # always get- this is a get '/'
   
-erb(:new)
+redirect '/'
 
   
 end
 
 
+delete '/delete_data/:id' do
+
+  sql = "delete from dishes where
+  id = #{params['dish_id']};"
+  
+  conn = PG.connect(dbname: 'goodfoodhunting')
+  conn.exec(sql)
+  conn.close
+
+  redirect '/'
+end
 
 
 
@@ -73,9 +84,36 @@ get '/add_dish' do
 end
 
 
+get '/edit_data/:id' do
+
+  sql = "select * from dishes where id = #{params['id']};"
+  conn = PG.connect(dbname: 'goodfoodhunting')
+  result = conn.exec(sql) # always returns an array [{'name => 'cake'}]
+  conn.close
+
+  dish = result[0]
+
+  erb(:edit, locals: { dish: dish})
+end
+
+
+put '/update_data/:id' do
+
+  sql = "update dishes set name = '#{params['name']}', image_url = '#{params['image_url']}' where id = #{params['id']};"
+
+  conn = PG.connect(dbname: 'goodfoodhunting')
+  result = conn.exec(sql)
+  conn.close
+
+  redirect "/dishes/#{params['id']}"
+
+end
+
+
+
 
 # route is not just the path
-# it's the http method + path
+# it's the http method + path for example home page is combination of get and /
 
 # so instead we should use post method
 
