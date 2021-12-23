@@ -1,50 +1,67 @@
 const makeFakeMap = (columnInput, rowInput, regionChar, area, char) => {
-  let innerArray = [];
-  let outerArray = [];
+  let outputArray = [];
   let columns = Number(columnInput);
   let rows = Number(rowInput);
 
-  let randomArray = randomIndex(columns, rows);
-  let yRandom = randomArray[0];
-  let xRandom = randomArray[1];
-  //   console.log(yRandom, xRandom);
-  let columnBox = Number(area);
-  let rowBox = Number(area);
+  outputArray = Array.from(Array(rows), () =>
+    Array.from(Array(columns), () => "A")
+  );
+  // simple way of creating the 2D array
+  //   for (let i = 0; i < columns; i++) {
+  //     outputArray.push([]);
 
-  for (let i = 0; i < columns; i++) {
-    innerArray.push([]);
+  //     for (let j = 0; j < rows; j++) {
+  //       outputArray[i].push("A");
+  //     }
+  //   }
+  let randomRegion = regionsMaker(columns, rows, area);
 
-    for (var j = 0; j < rows; j++) {
-      innerArray[i].push("A");
+  let [a, b] = randomIndex(randomRegion.length, randomRegion.length);
+
+  for (let n = 0; n < randomRegion.length; n++) {
+    let [x, y] = randomRegion[n];
+    if (n == a) {
+      outputArray[x][y] = char;
+    } else {
+      outputArray[x][y] = regionChar;
+    }
+  }
+  return outputArray;
+};
+
+const regionsMaker = (columnsNum, rowsNum, area) => {
+  var randomRegions = [];
+
+  // finding a starting spot for the region array
+  while (true) {
+    var randomY = Math.floor(Math.random() * columnsNum);
+    var randomX = Math.floor(Math.random() * rowsNum);
+
+    if (randomY <= columnsNum - area && randomX <= rowsNum - area) {
+      break;
     }
   }
 
-  //   if (i == yRandom && j == xRandom) {
-  //     for (let k = 0; k < columnBox; k++) {
-  //       //   console.log("this is working");
-  //       innerArray[k] = regionChar;
-  //       //   console.log(innerArray[yRandom][xRandom]);
-  //       for (let p = 0; p < rowBox; p++) {
-  //         // console.log("this is working");
-  //         innerArray[p] = regionChar;
-  //       }
-  //     }
-  //     // innerArray[i][j] = char;
-  //   }
+  // creating an array of region using the starting point
 
-  //   innerArray[yRandom][xRandom] = char;
-  //   console.log(innerArray);
-  return innerArray;
+  for (let m = 0; m < area; m++) {
+    for (p = 0; p < area; p++) {
+      randomRegions.push([randomY + m, randomX + p]);
+    }
+  }
+
+  //   randomRegions[randomTreasureY][randomTreasureX] = 'F'
+  return randomRegions;
 };
 
 const randomIndex = (yInput, xInput) => {
   var randomArray = [];
 
-  //   var randomY = Math.floor(Math.random() * yInput);
-  //   var randomX = Math.floor(Math.random() * xInput);
-  randomArray.push(2, 2); // delete after test
-  //   randomArray.push(randomY, randomX);
+  var randomY = Math.floor(Math.random() * yInput);
+  var randomX = Math.floor(Math.random() * xInput);
+  //   randomArray.push(2, 2); // delete after test
+  randomArray.push(randomY, randomX);
   return randomArray;
 };
 
-console.log(makeFakeMap(5, 5, "F", 3, "X"));
+console.log(makeFakeMap(7, 7, "O", 3, "X"));
