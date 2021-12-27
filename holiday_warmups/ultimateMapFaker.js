@@ -3,17 +3,19 @@ const makeFakeMap = (columnInput, rowInput, regionChar, area, char) => {
   let columns = Number(columnInput);
   let rows = Number(rowInput);
 
-  outputArray = Array.from(Array(rows), () =>
-    Array.from(Array(columns), () => "A")
-  );
-  // simple way of creating the 2D array
-  //   for (let i = 0; i < columns; i++) {
-  //     outputArray.push([]);
+  //   outputArray = Array.from(Array(rows), () =>
+  //     Array.from(Array(columns), () => "A")
+  //   );
+  //   simple way of creating the 2D array
+  for (let i = 0; i < rows; i++) {
+    outputArray.push([]);
 
-  //     for (let j = 0; j < rows; j++) {
-  //       outputArray[i].push("A");
-  //     }
-  //   }
+    for (let j = 0; j < columns; j++) {
+      outputArray[i].push("A");
+    }
+  }
+
+  //pushing the random region into output array
   let randomRegion = regionsMaker(columns, rows, area);
 
   let [a, b] = randomIndex(randomRegion.length, randomRegion.length);
@@ -29,6 +31,7 @@ const makeFakeMap = (columnInput, rowInput, regionChar, area, char) => {
   return outputArray;
 };
 
+//creating the random region in 2 steps
 const regionsMaker = (columnsNum, rowsNum, area) => {
   var randomRegions = [];
 
@@ -59,9 +62,8 @@ const randomIndex = (yInput, xInput) => {
 
   var randomY = Math.floor(Math.random() * yInput);
   var randomX = Math.floor(Math.random() * xInput);
-  //   randomArray.push(2, 2); // delete after test
   randomArray.push(randomY, randomX);
   return randomArray;
 };
-
-console.log(makeFakeMap(7, 7, "O", 3, "X"));
+//F: generate a forest W: generate a body of water D: generate a desert region
+console.log(makeFakeMap(5, 5, "W", 2, "X"));
