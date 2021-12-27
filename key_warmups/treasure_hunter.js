@@ -35,6 +35,8 @@ const treasureFinder = (arrInput) => {
   for (let i = 0; i < arrInput.length; i++) {
     for (let j = 0; j < arrInput[i].length; j++) {
       if (arrInput[i][j] == "X") {
+        // output.push(arrInput[i].indexOf("X"));
+        // output.push(arrInput[i].indexOf(j));
         output.push(j, i);
       }
     }
