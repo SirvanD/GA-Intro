@@ -15,3 +15,10 @@ VALUES ('Double Decker Chocolate', 'https://www.cakesandbakes.co.uk/files/double
 
 INSERT INTO dishes (name, image_url) 
 VALUES ('Another dish', 'https://www.cakesandbakes.co.uk/files/double-decker-front.png');
+
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email TEXT,
+    password_digest TEXT 
+);
