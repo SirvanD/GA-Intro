@@ -20,5 +20,6 @@ VALUES ('Another dish', 'https://www.cakesandbakes.co.uk/files/double-decker-fro
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email TEXT,
-    password_digest TEXT 
+    password_digest TEXT,
+    
 );

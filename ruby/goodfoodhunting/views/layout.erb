@@ -5,14 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
 </head>
 <body>
+
+
 <div class="navbar">
 <a href="/"> home</a>
+
+<% if logged_in? %>
 <a href="/dishes/new"> new dish</a>
+<% end %>
+
 <a href="/edit">edit dish</a>
-<a href="/login"> login</a>
+
+<% if logged_in? %>
+
+  Logged in as <%= current_user.email %>
+
+  <form action="/session" method="post">
+  <input type="hidden" name="_method" value="delete">
+  <button>logout</button>
+  </form>
+
+
+
+  <% else %>
+  <a href="/login"> login</a>
+
+<% end%>
+
 </div>
     
   <%= yield %>  

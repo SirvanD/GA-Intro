@@ -5,19 +5,81 @@ require 'pg' #need functions to talk to the db - gives us functions to work with
 require 'pry' # a gem for debugging 
 require 'bcrypt'
 
+require_relative 'models/dish.rb'
+
+# http is designed to be stateless
+# scalable 
+
+# to use sessions feature we have to enable it
+enable :sessions
+
+
 # Crud app
 # some resources - likes,users,comments, dishes create read update destory
 # route is the http method + path
+
+# CRUD 
+
+def all_dishes()
+
+  result = db_query("select * from dishes order by name;")
+end
+
+
+def create_dish(name, image_url)
+
+  sql = "insert into dishes (name, image_url) values ($1,$2);"
+
+  db_query(sql,[name, image_url])
+
+end
+
+
+
+def delete_dish()
+
+end
+
+
+def update_dish()
+
+end
+
+
+
+
+# helper methods
+
+def logged_in?()
+  if session[:user_id]
+    return true
+  else
+    return false
+  end
+end
+
+def current_user() 
+
+
+sql = "select * from users where id = #{ session[:user_id] };"
+
+user = db_query(sql).first
+
+return OpenStruct.new(user)
+
+end
+
+
 
 get ('/') do # is a fucntion of sinatra gem - creates a route to the homepage
   
   # we need to grab stuff from the db
 
-  conn = PG.connect(dbname: 'goodfoodhunting') # creates a connection to the db
+  # conn = PG.connect(dbname: 'goodfoodhunting') # creates a connection to the db
 
-  result = conn.exec("select * from dishes;")
+  result = db_query("select * from dishes order by name;")
 
-  conn.close
+  # conn.close
   # erb function returns a string to the page it's assigned to then we can use the local variables inside the page
   erb(:index, locals: { 
     dishes: result
@@ -26,18 +88,27 @@ end
 
 
 get '/dishes/new' do
-  erb(:new) 
+    redirect '/login' unless logged_in?
+    erb(:new) 
 end
 
 get '/dishes/:id' do
-  dish_id = params['id']
-  conn = PG.connect(dbname: 'goodfoodhunting')
-  sql = "select * from dishes where id = #{dish_id};"
 
-  result = conn.exec(sql) # pg will always return an array , in this case an array of single hash for id
-  dish = result[0] # {}
-  # dish_name = dish["name"]
-  conn.close
+  # never trust the user because of sql injection 
+
+  dish_id = params['id']
+  dish = db_query("select * from dishes where id = $1", [dish_id]).first
+
+
+  # dish_id = params['id']
+  # conn = PG.connect(dbname: 'goodfoodhunting')
+  # sql = "select * from dishes where id = $1;" #
+
+  # # result = conn.exec(sql) # pg will always return an array , in this case an array of single hash for id
+  # result = conn.exec_params(sql, [dish_id])
+  # dish = result[0] # {}
+  # # dish_name = dish["name"]
+  # conn.close
   
 
   erb(:show, locals: {
@@ -50,15 +121,16 @@ end
 # post means create 
 post '/dishes' do
 
+  redirect 'login' unless logged_in?
+
  #anything data sent by the client will
  #automatically be placed inside the params
  
 #  params["name"]
 
-sql = "insert into dishes (name, image_url) values ('#{params['name']}','#{params['image_url']}');"
-conn = PG.connect(dbname: 'goodfoodhunting')
-conn.exec(sql)
-conn.close
+
+ create_dish(params['name'], params['image_url'])
+
 
 # redirect '/' # always get- this is a get '/'
   
@@ -70,12 +142,8 @@ end
 
 delete '/dishes/:id' do
 
-  sql = "delete from dishes where
-  id = #{params['id']};"
   
-  conn = PG.connect(dbname: 'goodfoodhunting')
-  conn.exec(sql)
-  conn.close
+  delete_dish(params['id'])
 
   redirect '/'
 end
@@ -83,25 +151,20 @@ end
 
 get '/dishes/:id/edit' do
 
-  sql = "select * from dishes where id = #{params['id']};"
-  conn = PG.connect(dbname: 'goodfoodhunting')
-  result = conn.exec(sql) # always returns an array [{'name => 'cake'}]
-  conn.close
+  sql = "select * from dishes where id = $1;"
 
-  dish = result[0]
-
+  dish = db_query(sql, [params['id']]).first
   erb(:edit, locals: { dish: dish})
 end
 
 
 put '/dishes/:id' do
 
-  sql = "update dishes set name = '#{params['name']}', image_url = '#{params['image_url']}' where id = #{params['id']};"
-
-  conn = PG.connect(dbname: 'goodfoodhunting')
-  result = conn.exec(sql)
-  conn.close
-
+ update_dish(
+   params['name'],
+   params['image_url'],
+   params['id']
+ )
   redirect "/dishes/#{params['id']}"
 
 end
@@ -112,7 +175,7 @@ get '/login' do
 end
 
 
-get '/do_something' do
+post '/session' do
 
   email = params["email"]
   password = params["password"]
@@ -125,6 +188,12 @@ get '/do_something' do
 # if the user exists in the db and the password is correct
 
 if result.count > 0 && BCrypt::Password.new(result[0]['password_digest']).==(password)
+
+  # single source of truth, that's why we're only writing the id in the session
+
+  # write down this user is logged in
+
+  session[:user_id] = result[0]['id'] # it's a hash / session for a signle user
 
   # then redirect to the home route
   redirect '/'
@@ -159,6 +228,16 @@ end
   # password
   # check if password is correct
 
+
+
+end
+
+
+delete '/session' do
+
+  session[:user_id] = nil
+
+  redirect '/login'
 
 
 end
