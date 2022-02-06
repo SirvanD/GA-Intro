@@ -23,3 +23,9 @@ CREATE TABLE users (
     password_digest TEXT,
     
 );
+
+
+-- ER diagram - Entity Diagram to connect dbs together and the rules and structure 
+
+
+ALTER TABLE dishes ADD user_id INTEGER;

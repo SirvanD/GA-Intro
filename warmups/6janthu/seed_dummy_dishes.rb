@@ -7,7 +7,7 @@ conn = PG.connect(dbname: 'goodfoodhunting')
 
 20.times {
 
-    random_name = dish_names.sample
+    random_name = dish_names.sample(2).join(' with ')
     random_image_url = "https://baconmockup.com/#{rand(200..400)}/#{rand(200.300)}"
     sql = "INSERT INTO dishes (name,image_url) values ($1,$2);"
     conn.exec_params(sql, [random_name, random_image_url])

@@ -20,33 +20,6 @@ enable :sessions
 
 # CRUD 
 
-def all_dishes()
-
-  result = db_query("select * from dishes order by name;")
-end
-
-
-def create_dish(name, image_url)
-
-  sql = "insert into dishes (name, image_url) values ($1,$2);"
-
-  db_query(sql,[name, image_url])
-
-end
-
-
-
-def delete_dish()
-
-end
-
-
-def update_dish()
-
-end
-
-
-
 
 # helper methods
 
@@ -77,7 +50,7 @@ get ('/') do # is a fucntion of sinatra gem - creates a route to the homepage
 
   # conn = PG.connect(dbname: 'goodfoodhunting') # creates a connection to the db
 
-  result = db_query("select * from dishes order by name;")
+  result = all_dishes();
 
   # conn.close
   # erb function returns a string to the page it's assigned to then we can use the local variables inside the page
@@ -121,7 +94,7 @@ end
 # post means create 
 post '/dishes' do
 
-  redirect 'login' unless logged_in?
+  redirect '/login' unless logged_in?
 
  #anything data sent by the client will
  #automatically be placed inside the params
@@ -129,7 +102,7 @@ post '/dishes' do
 #  params["name"]
 
 
- create_dish(params['name'], params['image_url'])
+ create_dish(params['name'], params['image_url'], current_user().id)
 
 
 # redirect '/' # always get- this is a get '/'

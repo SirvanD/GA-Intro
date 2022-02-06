@@ -21,11 +21,11 @@ def all_dishes()
   end
   
   
-  def create_dish(name, image_url)
+  def create_dish(name, image_url, user_id)
   
-    sql = "insert into dishes (name, image_url) values ($1, $2);"
+    sql = "insert into dishes (name, image_url, user_id) values ($1, $2, $3);"
   
-    db_query(sql,[name, image_url])
+    db_query(sql,[name, image_url, user_id])
   
   end
   
@@ -40,7 +40,7 @@ def all_dishes()
   
   def update_dish(name, image_url, id)
   
-    sql = "update dishes set name = $1, image_url = $2' where id = $3;"
+    sql = "update dishes set name = $1, image_url = $2 where id = $3;"
 
     db_query(sql, [name,image_url,id])
 
