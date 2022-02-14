@@ -1,0 +1,14 @@
+{
+  "name": "14feb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "allergies.js",
+  "scripts": {
+    "test": "jest allergies.test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^27.5.1"
+  }
+}
