@@ -1,5 +1,6 @@
 //challenge
 //codewars
+//new challenge
 const highAndLow = (numbers) => {
   var array = numbers.split(" ");
   const high = Math.max(...array);
