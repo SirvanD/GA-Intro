@@ -5,6 +5,7 @@
 //new challenge
 //codewars challenge 21/3/2022
 //Another day another challenge
+//challenge
 const highAndLow = (numbers) => {
   var array = numbers.split(" ");
   const high = Math.max(...array);
