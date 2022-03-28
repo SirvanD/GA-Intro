@@ -7,7 +7,7 @@
 //Another day another challenge
 //challenge
 //new challenge
-//another challenges
+//another challenge
 const highAndLow = (numbers) => {
   var array = numbers.split(" ");
   const high = Math.max(...array);
