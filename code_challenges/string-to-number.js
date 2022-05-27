@@ -9,9 +9,11 @@
 // "1405" --> 1405
 // "-7" --> -7
 
-const stringToNumber = (str) => {
-  return console.log(Number(str));
-};
+// const stringToNumber = (str) => {
+//   return console.log(Number(str));
+// };
+
+const stringToNumber = (str) => console.log(Number(str));
 
 stringToNumber("1234");
 stringToNumber("605");
