@@ -9,7 +9,7 @@ const squareSum = (numbers) => {
   );
 };
 
-//version 2
+//version 3
 // const squareSum = (numbers) => {
 //   return numbers.map((num,index)=>{
 
