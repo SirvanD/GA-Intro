@@ -19,12 +19,16 @@ const removeSmallest = (numbers) => {
   if (numbers.length === 0) {
     return [];
   }
-  for (let i = 0; i < numbers.length; i++) {
-    if (numbers[i] === Math.min(...numbers)) {
-      let smallest = numbers.splice(i, 1);
-      return numbers;
+  let numbers2 = [...numbers];
+  for (let i = 0; i < numbers2.length; i++) {
+    if (numbers2[i] === Math.min(...numbers2)) {
+      let smallest = numbers2.splice(i, 1);
+      return numbers2;
     }
   }
+  // let smallestNum = Math.min(...numbers);
+  // let smallestIdx = numbers[]
+  // return numbers.filter((num,idx) => num[idx]= smallestNum);
 };
 
 console.log(removeSmallest([1, 2, 3, 4, 5]));
